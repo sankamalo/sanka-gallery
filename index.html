@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sanka · Galería de Animaciones</title>
+  <link rel="stylesheet" href="css/style_perfecta.css" />
+</head>
+<body>
+  <header>
+    <h1>SANKA · GALERÍA DE ANIMACIONES</h1>
+    <p>Hover para ver título · Click para activar sonido</p>
+  </header>
+  <main class="gallery">
+    <div class="video-block"><div class="video-wrapper"><video muted loop playsinline class="preview"><source src="videos/obra1.mp4" type="video/mp4"></video><div class="video-overlay">Obra 1</div></div></div>
+    <div class="video-block"><div class="video-wrapper"><video muted loop playsinline class="preview"><source src="videos/obra2.mp4" type="video/mp4"></video><div class="video-overlay">Obra 2</div></div></div>
+    <div class="video-block"><div class="video-wrapper"><video muted loop playsinline class="preview"><source src="videos/obra3.mp4" type="video/mp4"></video><div class="video-overlay">Obra 3</div></div></div>
+    <div class="video-block"><div class="video-wrapper"><video muted loop playsinline class="preview"><source src="videos/obra4.mp4" type="video/mp4"></video><div class="video-overlay">Obra 4</div></div></div>
+  </main>
+<script>
+  const wrappers = document.querySelectorAll(".video-wrapper");
+
+  wrappers.forEach((wrapper, index) => {
+    const video = wrapper.querySelector("video");
+
+    wrapper.addEventListener("mouseenter", () => {
+      wrappers.forEach((w, i) => {
+        const dist = Math.abs(i - index);
+        let scale = 1;
+        if (dist === 0) scale = 1.15;
+        else if (dist === 1) scale = 0.93;
+        else if (dist === 2) scale = 0.97;
+        else scale = 1;
+        w.style.transform = `scale(${scale})`;
+        w.style.zIndex = dist === 0 ? 2 : 1;
+      });
+      video.play();
+    });
+
+    wrapper.addEventListener("mouseleave", () => {
+      wrappers.forEach((w) => {
+        w.style.transform = "scale(1)";
+        w.style.zIndex = 1;
+      });
+      const fadeOut = setInterval(() => {
+        if (video.volume > 0.1) {
+          video.volume -= 0.1;
+        } else {
+          video.volume = 0;
+          clearInterval(fadeOut);
+          video.pause();
+          video.currentTime = 0;
+          video.volume = 1;
+        }
+      }, 30);
+    });
+
+    video.addEventListener("click", () => {
+      video.muted = false;
+      video.controls = true;
+    });
+  });
+</script>
+</body>
+</html>
