@@ -9,6 +9,7 @@ Tools: `ffmpeg`/`ffprobe` with `drawtext`, `subtitles` and `ass` (libass). Fonts
 
 ## Workflow
 1. **Inputs** go in `media/in/` (raw = `bruto*`, reference = `ref*`). Outputs in `media/out/`. Large videos are NOT committed (see `.gitignore`).
+1b. **Instagram reference link**: `pip install -q yt-dlp` then `yt-dlp -o media/in/ref.%(ext)s <URL>`. Needs the `sanka-gallery` cloud environment (allows instagram.com). If the download fails with proxy 403, run `yt-dlp -g <URL>` to see the video CDN host (e.g. `scontent-xxx-1.cdninstagram.com`) and ask to add that exact host with update_environment.
 2. **Inspect**: `ffprobe -v error -show_entries format=duration:stream=width,height,r_frame_rate,codec_name -of json FILE`.
 3. **Study the reference** (if given): extract frames `ffmpeg -i ref.mp4 -vf fps=1,scale=360:-1 media/tmp/ref_%03d.jpg` and look at them: cut rhythm (count scene changes with `-vf "select='gt(scene,0.3)',showinfo"`), subtitle style (font, size, colour, position, words per line), text overlays, duration, music.
 4. **Look at the raw footage** the same way, plus audio. Propose a short edit plan (timestamps for each cut + texts) and confirm with the user before rendering if anything is ambiguous.
